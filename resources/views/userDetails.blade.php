@@ -1,4 +1,5 @@
 <html>
+<head> <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script></head>
 <body>
 <style>
 body {
@@ -6,6 +7,13 @@ body {
   color: white;
   font-family: "Asap", sans-serif;
 }
+.type11
+{
+
+  color: black;
+  font-family: "Asap", sans-serif;
+}
+
 .container-fluid {
   position: absolute;
   left: 50%;
@@ -146,18 +154,86 @@ a {
     width: 100%;
   }
 }
+
 </style>
 <div class="container-fluid">
-    <form class="submit">
-        <input type="text" placeholder="Car Number">
-        <select>
-        	<option value="volvo">Type</option>
-            <option value="saab">Small</option>
-            <option value="opel">Medium</option>
-            <option value="audi">Large</option>
-        </select>
-        <button>Submit</button>
+    <form name="myform" id="myform" class="submit" onsubmit="return validate()">
+        <input type="text" name="carNumber" id="carNumber" placeholder="Car Number">
+        <label for="Small" class="type11">
+        <input type="radio" id="Small" name="Type" value="Small" >
+        Small</label>
+        <label for="Medium" class="type11">
+        <input type="radio" id="Medium" name="Type" value="Medium">
+        Medium</label>
+        <label for="Large" class="type11">
+        <input type="radio" id="Large" name="Type" value="Large">
+        Large</label>
+        <p id="freeslot" class="type11" style="color:red;font-size:25px;align:center"></p>
+
+        <br><span id="error"></span><br>
+        <button type="submit" id="submit" value="submit">Submit</button>
     </form>
 </div>
 </body>
+ <script>
+function validate(){
+  var t=document.myform.carNumber.value;
+  var r=document.getElementById("error");
+  if(t == ""){
+    r.textContent = "*Please these fields";
+     r.style.color = "red";
+      return false;
+  }
+}
+</script>
+<script>
+
+jQuery(document).ready(function($) {
+    $('#submit').on('click', function(evt) {
+
+        evt.preventDefault();
+        var serialized = $('#myform').serialize();
+        console.log(serialized);
+            $.ajax({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                type: 'post',
+                url: '/api/freeslot',
+                datatype: 'json',
+                data: serialized,
+
+                success: function(data) {
+                    function not1() {
+
+                        if (data.statuscode == '200')
+                        {
+
+                        document.getElementById("freeslot").innerHTML = "Your slot is....." + data.freeslot +"!!";
+                          $('#carNumber').prop("disabled","true" );
+                          $('#type').prop("disabled", "true");
+                        }
+
+
+                        else if (data.statuscode == '200')
+                         {
+                          alert(data.message);
+                        }
+                    }
+
+                    not1();
+
+                },
+                error: function(data) {
+                    var errors = data.responseJSON;
+                    console.log(errors);
+                }
+            });
+
+    });
+
+});
+</script>
+</script>
+
 </html>

@@ -1,6 +1,8 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\smartParkingController;
+use App\Http\Controllers\AuthController;
 
 /*
 |--------------------------------------------------------------------------
@@ -21,10 +23,12 @@ use Illuminate\Support\Facades\Route;
 //     return view('admin');
 // });
 
-Route::get('/login', function(){
-    return view('login');
+Route::get('/login', function()
+{ return view('login');
    });
-
- Route::get('/userDetails', function(){
+Route::get('/logout', [AuthController::class, 'logout']);
+Route::get('/userDetails', function(){
     return view('userDetails');
    });
+Route::get('/admin/view', [smartParkingController::class, 'adminView']);
+

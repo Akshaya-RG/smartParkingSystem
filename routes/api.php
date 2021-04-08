@@ -2,6 +2,8 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\smartParkingController;
+use App\Http\Controllers\AuthController;
 
 /*
 |--------------------------------------------------------------------------
@@ -17,3 +19,11 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
+
+// Route:get('/entryTime','smartParkingController@enterSlot');
+Route::post('/entryTime', [smartParkingController::class, 'enterSlot']);
+Route::post('/exitSlot', [smartParkingController::class, 'exitSlot']);
+Route::post('/freeslot', [smartParkingController::class, 'freeslot']);
+// Route::get('/insert', [smartParkingController::class, 'insert']);
+Route::post('/login', [AuthController::class, 'login']);
+

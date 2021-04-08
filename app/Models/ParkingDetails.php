@@ -7,5 +7,14 @@ use Illuminate\Database\Eloquent\Model;
 
 class ParkingDetails extends Model
 {
-    use HasFactory;
+    //protected $table='parkingDetails';
+    protected $primaryKey = 'id';
+    protected $fillable = [
+        'carNumber',
+        'slotNumber',
+        'Type',
+        'entryTime',
+        'exitTime',
+        'updated_at'
+     ];
 }

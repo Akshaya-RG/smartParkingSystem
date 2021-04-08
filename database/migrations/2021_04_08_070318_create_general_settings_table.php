@@ -15,7 +15,11 @@ class CreateGeneralSettingsTable extends Migration
     {
         Schema::create('general_settings', function (Blueprint $table) {
             $table->id();
+            $table->string('userName');
+            $table->string('password');
+            $table->string('freeSlots');
             $table->timestamps();
+
         });
     }
 

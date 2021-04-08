@@ -1,4 +1,5 @@
 <html>
+<head> <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script></head>
 <body>
 <style>
 body {
@@ -148,11 +149,92 @@ a {
 }
 </style>
 <div class="container-fluid">
-    <form class="submit">
-        <input type="text" placeholder="Username">
-        <input type="password" placeholder="Password">
-        <button>Login</button>
+    <form name="myform" id="myform" class="submit" onsubmit="return validate()">
+        <input type="text"  id="username"  name="username" placeholder="Username">
+        <br><span id="em"></span><br>
+        <input type="password"  id="password" name="password" placeholder="Password">
+        <br><span id="error"></span><br>
+        <button type="submit"  id="submit" value="submit">Login</button>
     </form>
 </div>
 </body>
+ <script>
+function validate(){
+  var u = document.myform.username.value;
+  var p = document.myform.password.value;
+  var e = document.getElementById("em");
+  var r = document.getElementById("error");
+  var atposition =  u.indexOf("@");
+  var dotposition = u.lastIndexOf(".");
+  if(u == "" || p == ""){
+    r.textContent = "*Please fill these fields";
+     r.style.color = "red";
+      return false;
+  }
+
+  if( atposition < 1 || dotposition < atposition + 2 || dotposition + 2 >= m.length){
+    e.textContent = "*Please enter the valid email address";
+     e.style.color = "red";
+      return false;
+  }
+
+  if(p.length < 6){
+    r.textContent = "*Password mudt be atleast 6 characters";
+     r.style.color = "red";
+      return false;
+  }
+}
+ </script>
+
+   <script>
+jQuery(document).ready(function($) {
+  console.log("zcss");
+    $('#submit').on('click', function(evt) {
+
+        evt.preventDefault();
+        var serialized = $('#myform').serialize();
+        //console.log(serialized);
+
+            $.ajax({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                type: 'post',
+                url: '/api/login',
+                datatype: 'json',
+                data: serialized,
+
+                success: function(data) {
+                    function not1() {
+
+                        if (data.statuscode == '201')
+                        {
+                          alert("check login credentials");
+
+                        }
+
+
+
+                    }
+
+                    not1();
+
+                    if (data.statuscode == '200')
+                    {
+
+                        window.location.href = "/admin/view";
+                    }
+
+                },
+                error: function(data) {
+                    var errors = data.responseJSON;
+                    console.log(errors);
+                }
+            });
+
+    });
+});
+</script>
+   <script>
+
 </html>

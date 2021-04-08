@@ -15,7 +15,14 @@ class CreateParkingDetailsTable extends Migration
     {
         Schema::create('parking_details', function (Blueprint $table) {
             $table->id();
+            $table->string('carNumber');
+            $table->string('slotNumber');
+            $table->string('Type');
+            $table->string('entryTime')->nullable();
+            $table->string('exitTime')->nullable();
             $table->timestamps();
+
+
         });
     }
 
