@@ -77,8 +77,8 @@ button.right {
         <td>{{$view->carNumber}}</td>
         <td>{{$view->slotNumber}}</td>
         <td>{{$view->Type}}</td>
-        <td>{{$view->entryTime}}</td>
-        <td>{{$view->exitTime}}</td>
+        <td>{{$view->created_at}}</td>
+        <td>{{$view->updated_at}}</td>
       </tr>
     @endforeach
   </table>

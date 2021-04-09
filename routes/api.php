@@ -21,9 +21,9 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 });
 
 // Route:get('/entryTime','smartParkingController@enterSlot');
+// Route::get('/insert', [smartParkingController::class, 'insert']);
 Route::post('/entryTime', [smartParkingController::class, 'enterSlot']);
 Route::post('/exitSlot', [smartParkingController::class, 'exitSlot']);
-Route::post('/freeslot', [smartParkingController::class, 'freeslot']);
-// Route::get('/insert', [smartParkingController::class, 'insert']);
+Route::POST('/freeslot', [smartParkingController::class, 'freeslot']);
 Route::post('/login', [AuthController::class, 'login']);
 

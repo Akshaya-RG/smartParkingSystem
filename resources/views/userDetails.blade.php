@@ -215,9 +215,11 @@ jQuery(document).ready(function($) {
                         }
 
 
-                        else if (data.statuscode == '200')
+                        else if(data.statuscode == '201')
                          {
-                          alert(data.message);
+                          document.getElementById("freeslot").innerHTML = data.message;
+                          $('#carNumber').prop("disabled","true" );
+                          $('#type').prop("disabled", "true");
                         }
                     }
 

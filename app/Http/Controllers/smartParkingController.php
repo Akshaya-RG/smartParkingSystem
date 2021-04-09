@@ -5,9 +5,57 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\GeneralSettings;
 use App\Models\ParkingDetails;
-
+use DB;
 class smartParkingController extends Controller
 {
+
+    public function freeslot(Request $request){
+        try{
+            DB::beginTransaction();
+            $count=0;
+            $freeSlots=GeneralSettings::where('id','1')->get('freeSlots');
+            $af= $freeSlots[0]->freeSlots;
+            $aaa=json_decode($af);
+            foreach ($aaa as $key=>$aa)
+            {
+                if($aa=='1')
+                {
+                    $freeSlotAvailable=$key;
+                    $count++;
+                }
+            }
+            if($count>0)
+            {
+            $insert = ParkingDetails::create([
+                'carNumber' => $request->carNumber,
+                'Type' => $request->Type,
+                'slotNumber'=>$freeSlotAvailable
+            ]);
+            $insert->save();
+            DB::commit();
+            return response()->json(['statuscode' => '200','freeslot' => $freeSlotAvailable]);
+            }
+            else{
+                //return "zX";
+                return response()->json(['message' => "No slot Available...Please Visit later", 'statuscode' => '201']);
+
+            }
+        }
+        catch(\Exception $e){
+            DB::rollback();
+            return $e;
+        }
+    }
+
+    public function adminView(Request $request){
+        try{
+            $view = ParkingDetails::all();
+            return view('adminView',['views'=>$view]);
+        }
+        catch(\Exception $e){
+            return $e;
+        }
+    }
     public function enterSlot(Request $request)
     {
     try{
@@ -15,7 +63,7 @@ class smartParkingController extends Controller
     $freeSlots=GeneralSettings::where('id','1')->get('freeSlots');
     $af= $freeSlots[0]->freeSlots;
     $aaa=json_decode($af);
-    echo gettype($aaa);
+    //echo gettype($aaa);
     foreach ($aaa as $key=>$aa)
     {
         if($key=='i'.$request->num){
@@ -42,7 +90,7 @@ class smartParkingController extends Controller
         $freeSlots=GeneralSettings::where('id','1')->get('freeSlots');
         $af= $freeSlots[0]->freeSlots;
         $aaa=json_decode($af);
-        echo gettype($aaa);
+       // echo gettype($aaa);
         foreach ($aaa as $key=>$aa)
         {
             if($key=='i'.$request->num){
@@ -61,59 +109,6 @@ class smartParkingController extends Controller
             return $e;
        }
 
-
-
     }
-
-
-    public function freeslot(Request $request){
-        try{
-           //  return $request->all();
-            $count=0;
-            $freeSlots=GeneralSettings::where('id','1')->get('freeSlots');
-            $af= $freeSlots[0]->freeSlots;
-            $aaa=json_decode($af);
-           // echo gettype($aaa);
-            foreach ($aaa as $key=>$aa)
-            {
-                {
-                    $freeSlotAvailable=$key;
-                    $count++;
-                }
-            }
-            if($count>0)
-            {
-            $insert = ParkingDetails::create([
-                'carNumber' => $request->carNumber,
-                'Type' => $request->Type,
-                'slotNumber'=>$freeSlotAvailable
-            ]);
-            $insert->save();
-            return response()->json(['statuscode' => '200','freeslot' => $freeSlotAvailable]);
-            }
-            else{
-                return response()->json(['message' => "No slot Available...Please Visit later", 'statuscode' => '201']);
-
-            }
-        }
-        catch(\Exception $e){
-            return $e;
-    }
-}
-
-
-
-public function adminView(Request $request){
-    try{
-        $view = ParkingDetails::all();
-
-        return view('adminView',['views'=>$view]);
-
-    }
-    catch(\Exception $e){
-        return $e;
-    }
-}
-
 
 }
